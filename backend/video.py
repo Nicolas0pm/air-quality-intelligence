@@ -1,5 +1,6 @@
 """Genera el video demostrativo (MP4, 1920x1080) a partir de las capturas y gráficas.
-Requiere matplotlib y ffmpeg.  Ejecutar:  python backend/video.py [salida.mp4]"""
+Requiere matplotlib y ffmpeg; para la narración, edge-tts (pip install edge-tts).
+Ejecutar:  python backend/video.py [salida.mp4] [edge-tts]"""
 import os
 import subprocess
 import sys
@@ -90,23 +91,65 @@ def escena(path, titulo, img, recorte, texto):
     plt.close(fig)
 
 
+# Narración (texto escrito como se pronuncia, para la voz sintética)
+NARRACION = [
+    "Hola. Este es Air Quality Intelligence, un sistema inteligente para el monitoreo, la descontaminación y la purificación del aire, desarrollado para la asignatura de Inteligencia de Negocios.",
+    "El reto es desarrollar una aplicación que identifique el ingreso de aire contaminado, analice sus componentes, controle el proceso de descontaminación y verifique la calidad del aire purificado con indicadores de inteligencia de negocios.",
+    "La arquitectura tiene cuatro componentes. Los sensores de entrada miden el aire; el sistema de purificación lo trata; los sensores de salida lo validan. Un backend en Python clasifica las mediciones, controla los filtros y guarda todo en la base de datos, y la interfaz en React muestra el dashboard.",
+    "En el módulo uno, al detectar el ingreso de aire, el sistema registra la fecha y la hora y mide material particulado PM dos punto cinco y PM diez, dióxido de carbono y monóxido de carbono. Cada contaminante se clasifica según la Resolución veintidós cincuenta y cuatro de dos mil diecisiete, se generan alertas y se recomiendan los filtros adecuados.",
+    "En el módulo dos se eligen las tecnologías. El filtro HEPA captura partículas, el catalizador de hopcalita elimina el monóxido de carbono y el adsorbente reduce el dióxido de carbono. Antes de activar el proceso, el modelo predictivo estima cuántos minutos se necesitan.",
+    "Durante la purificación se registra una medición por minuto y las curvas bajan de forma exponencial. En este lote, en treinta minutos, el PM dos punto cinco pasó de ciento cuarenta y dos a dos microgramos por metro cúbico.",
+    "En el módulo tres se mide de nuevo el aire, se comparan los valores iniciales y finales y se calcula el porcentaje de reducción de cada contaminante. Aquí el resultado del tratamiento fue excelente.",
+    "El módulo cuatro es el dashboard de inteligencia de negocios. Muestra el PM dos punto cinco antes y después, el dióxido de carbono en partes por millón, el porcentaje de reducción, el tiempo de purificación, el cumplimiento y las alertas, con gráficos comparativos de entrada y salida.",
+    "Más abajo están la eficiencia por combinación de filtros, la distribución de niveles de contaminación al ingreso, las alertas recientes y el modelo predictivo del tiempo de purificación.",
+    "La sección de reportes resume los resultados por fuente de aire y muestra el detalle de cada lote, con exportación a CSV para la toma de decisiones.",
+    "Analizamos cuarenta y un lotes. El PM dos punto cinco se redujo noventa y dos por ciento, de ochenta y cinco a menos de cuatro microgramos por metro cúbico, y el ochenta y tres por ciento de los lotes salió en nivel bueno o aceptable.",
+    "La eficiencia depende de los filtros. El HEPA no actúa sobre gases y el carbón activado solo fue la peor opción. Con catalizador, el monóxido de carbono bajó más del noventa y seis por ciento.",
+    "Como componente de inteligencia, además de la regla de alertas, el sistema ajusta un modelo exponencial con los datos históricos. Con filtro HEPA, un aire de cien microgramos llega al nivel bueno en unos diez minutos.",
+    "En conclusión, la aplicación cumple el ciclo completo: detecta, clasifica, purifica, valida y reporta. Los lotes que no cumplieron tenían un gas sin tratar, por eso la selección de filtros es clave. El código está disponible en GitHub. Gracias.",
+]
+assert len(NARRACION) == len(ESCENAS)
+VOZ = "es-CO-GonzaloNeural"
+
+
+def duracion(path):
+    out = subprocess.run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0", path],
+                         capture_output=True, text=True, check=True).stdout
+    return float(out.strip())
+
+
 def main():
+    """Uso: python video.py [salida.mp4] [comando_edge_tts]
+    Si se indica el comando de edge-tts, cada escena lleva narración y dura lo que dura su audio."""
+    tts = sys.argv[2] if len(sys.argv) > 2 else None
     tmp = tempfile.mkdtemp(prefix="aqi_video_")
-    lista = []
+    segmentos, total = [], 0.0
     for i, (t, img, rec, txt, seg) in enumerate(ESCENAS):
-        p = os.path.join(tmp, f"s{i:02d}.png")
-        escena(p, t, img, rec, txt)
-        lista.append((p, seg))
-    concat = os.path.join(tmp, "lista.txt")
-    with open(concat, "w") as f:
-        for p, seg in lista:
-            f.write(f"file '{p}'\nduration {seg}\n")
-        f.write(f"file '{lista[-1][0]}'\n")
+        png = os.path.join(tmp, f"s{i:02d}.png")
+        escena(png, t, img, rec, txt)
+        mp4 = os.path.join(tmp, f"s{i:02d}.mp4")
+        if tts:
+            mp3 = os.path.join(tmp, f"s{i:02d}.mp3")
+            subprocess.run([tts, "--voice", VOZ, "--rate=-4%", "--text", NARRACION[i], "--write-media", mp3],
+                           check=True, capture_output=True)
+            seg = round(duracion(mp3) + 1.4, 2)  # pausa al final de cada escena
+            audio = ["-i", mp3, "-af", "adelay=400|400,apad"]
+        else:
+            audio = ["-f", "lavfi", "-i", "anullsrc=r=24000:cl=mono"]
+        subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-loop", "1", "-framerate", "30", "-i", png, *audio,
+                        "-t", str(seg), "-vf", "format=yuv420p", "-c:v", "libx264", "-preset", "medium",
+                        "-tune", "stillimage", "-crf", "20", "-c:a", "aac", "-b:a", "128k", "-ar", "24000",
+                        "-ac", "1", mp4], check=True)
+        segmentos.append(mp4)
+        total += seg
+        print(f"escena {i + 1:2d}: {seg:5.1f} s")
+    lista = os.path.join(tmp, "lista.txt")
+    with open(lista, "w") as f:
+        f.writelines(f"file '{m}'\n" for m in segmentos)
     os.makedirs(os.path.dirname(os.path.abspath(OUT)), exist_ok=True)
-    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", concat,
-                    "-vf", "fps=30,format=yuv420p", "-c:v", "libx264", "-preset", "medium", "-crf", "20",
-                    "-movflags", "+faststart", OUT], check=True)
-    print(OUT, sum(s for _, s in lista), "s")
+    subprocess.run(["ffmpeg", "-y", "-loglevel", "error", "-f", "concat", "-safe", "0", "-i", lista,
+                    "-c", "copy", "-movflags", "+faststart", OUT], check=True)
+    print(OUT, f"{total:.0f} s ({int(total // 60)}:{int(total % 60):02d})")
 
 
 if __name__ == "__main__":
