@@ -2,7 +2,7 @@
 
 Sistema inteligente para el monitoreo, la descontaminación y la purificación del aire, con dashboard de inteligencia de negocios.
 
-**Video demostrativo:** https://youtu.be/xz_hg-2_6tE
+**Video demostrativo:** https://youtu.be/3qx19wCI_6U
 
 ## Cómo ejecutarlo
 
