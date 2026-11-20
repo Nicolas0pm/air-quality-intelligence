@@ -1,0 +1,210 @@
+{
+  "n": 41,
+  "pm25": {
+    "antes": 84.8,
+    "despues": 3.81,
+    "reduccion": 92.2
+  },
+  "pm10": {
+    "antes": 169.11,
+    "despues": 8.47,
+    "reduccion": 91.6
+  },
+  "co2": {
+    "antes": 834.49,
+    "despues": 764.9,
+    "reduccion": 5.5
+  },
+  "co": {
+    "antes": 10.91,
+    "despues": 3.15,
+    "reduccion": 53.4
+  },
+  "minutos": 24.1,
+  "cumplimiento": 82.9,
+  "resultados": {
+    "Excelente": 19,
+    "Satisfactorio": 15,
+    "Parcial": 3,
+    "Insuficiente": 4
+  },
+  "niveles_in": {
+    "Buena": 0,
+    "Aceptable": 3,
+    "Dañina para grupos sensibles": 4,
+    "Dañina para la salud": 18,
+    "Muy dañina": 16,
+    "Peligrosa": 0
+  },
+  "niveles_out": {
+    "Buena": 19,
+    "Aceptable": 15,
+    "Dañina para grupos sensibles": 4,
+    "Dañina para la salud": 2,
+    "Muy dañina": 1,
+    "Peligrosa": 0
+  },
+  "combos": [
+    {
+      "filtros": "HEPA",
+      "n": 13,
+      "red_pm25": 94.3,
+      "red_pm10": 93.0,
+      "red_co": 1.5,
+      "red_co2": 0.2,
+      "minutos": 17.7,
+      "cumple": 69.2
+    },
+    {
+      "filtros": "PRE,HEPA,CARBON,CATALIZADOR",
+      "n": 12,
+      "red_pm25": 97.5,
+      "red_pm10": 97.1,
+      "red_co": 97.7,
+      "red_co2": -0.1,
+      "minutos": 31.2,
+      "cumple": 91.7
+    },
+    {
+      "filtros": "PRE,HEPA,CATALIZADOR",
+      "n": 7,
+      "red_pm25": 96.6,
+      "red_pm10": 96.3,
+      "red_co": 96.5,
+      "red_co2": 0.3,
+      "minutos": 25.7,
+      "cumple": 100.0
+    },
+    {
+      "filtros": "PRE,HEPA",
+      "n": 3,
+      "red_pm25": 94.7,
+      "red_pm10": 94.4,
+      "red_co": -0.4,
+      "red_co2": 0.1,
+      "minutos": 21.7,
+      "cumple": 100.0
+    },
+    {
+      "filtros": "PRE,HEPA,CARBON,CATALIZADOR,CO2",
+      "n": 3,
+      "red_pm25": 98.5,
+      "red_pm10": 98.2,
+      "red_co": 98.1,
+      "red_co2": 49.8,
+      "minutos": 31.7,
+      "cumple": 100.0
+    },
+    {
+      "filtros": "CARBON",
+      "n": 2,
+      "red_pm25": 19.5,
+      "red_pm10": 20.0,
+      "red_co": 14.4,
+      "red_co2": 0.8,
+      "minutos": 12.5,
+      "cumple": 0.0
+    },
+    {
+      "filtros": "HEPA,CO2",
+      "n": 1,
+      "red_pm25": 89.8,
+      "red_pm10": 89.7,
+      "red_co": -0.8,
+      "red_co2": 71.4,
+      "minutos": 20.0,
+      "cumple": 100.0
+    }
+  ],
+  "fuentes": [
+    {
+      "fuente": "Zona industrial",
+      "n": 16,
+      "pm25_in": 130.2,
+      "pm25_out": 2.7,
+      "co_in": 10.83,
+      "co_out": 4.79,
+      "co2_in": 889,
+      "co2_out": 799,
+      "cumple": 68.8
+    },
+    {
+      "fuente": "Tráfico vehicular",
+      "n": 13,
+      "pm25_in": 65.9,
+      "pm25_out": 2.1,
+      "co_in": 17.47,
+      "co_out": 0.47,
+      "co2_in": 751,
+      "co2_out": 751,
+      "cumple": 100.0
+    },
+    {
+      "fuente": "Exterior urbano",
+      "n": 9,
+      "pm25_in": 50.0,
+      "pm25_out": 3.4,
+      "co_in": 4.77,
+      "co_out": 4.75,
+      "co2_in": 561,
+      "co2_out": 560,
+      "cumple": 100.0
+    },
+    {
+      "fuente": "Interior oficina",
+      "n": 3,
+      "pm25_in": 29.1,
+      "pm25_out": 18.1,
+      "co_in": 1.35,
+      "co_out": 1.22,
+      "co2_in": 1727,
+      "co2_out": 1257,
+      "cumple": 33.3
+    }
+  ],
+  "modelos": {
+    "HEPA": {
+      "k": 0.2202,
+      "n": 13
+    },
+    "PRE,HEPA,CATALIZADOR": {
+      "k": 0.2501,
+      "n": 7
+    },
+    "PRE,HEPA,CARBON,CATALIZADOR": {
+      "k": 0.2695,
+      "n": 12
+    },
+    "HEPA,CO2": {
+      "k": 0.2186,
+      "n": 1
+    },
+    "PRE,HEPA": {
+      "k": 0.2495,
+      "n": 3
+    },
+    "CARBON": {
+      "k": 0.0203,
+      "n": 2
+    },
+    "PRE,HEPA,CARBON,CATALIZADOR,CO2": {
+      "k": 0.2703,
+      "n": 3
+    }
+  },
+  "alertas": {
+    "ALTA": 73,
+    "CRÍTICA": 16,
+    "MEDIA": 12
+  },
+  "alertas_etapa": {
+    "entrada|ALTA": 66,
+    "entrada|CRÍTICA": 16,
+    "salida|ALTA": 7,
+    "salida|MEDIA": 12
+  },
+  "mediciones": 1031,
+  "modelo_mae": 0.08,
+  "modelo_n": 39,
+  "modelo_combo": "HEPA"
+}
