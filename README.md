@@ -2,6 +2,8 @@
 
 Sistema inteligente para el monitoreo, la descontaminación y la purificación del aire, con dashboard de inteligencia de negocios.
 
+**Video demostrativo:** https://youtu.be/xz_hg-2_6tE
+
 ## Cómo ejecutarlo
 
 Solo necesita Python 3.10 o superior (no hay que instalar paquetes para la aplicación).
