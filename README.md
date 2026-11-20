@@ -15,7 +15,12 @@ Para regenerar las gráficas del análisis (requiere matplotlib y numpy):
 
 ```bash
 cd backend && python analisis.py && python diagrama.py
+python backend/video.py      # video demostrativo (requiere ffmpeg)
 ```
+
+## Base de datos
+
+La base de datos de demostración está en `database/air_quality.db` (SQLite) con 41 lotes y 1.031 mediciones. Para verla sin instalar nada, las tablas están exportadas en [`database/csv/`](database/csv): `sesiones`, `mediciones`, `alertas`, `filtros` y la vista `v_resultados` (antes vs. después y % de reducción).
 
 ## Módulos
 
@@ -34,7 +39,7 @@ Enlace directo a un lote: `http://localhost:8000/#validacion/12`.
 ```
 backend/   calidad.py (reglas, simulador, alertas, modelo) · db.py · server.py · seed.py · analisis.py · diagrama.py
 frontend/  index.html · app.js (React 18 + htm, sin compilación) · styles.css
-database/  schema.sql (SQLite) · schema_postgresql.sql · air_quality.db
+database/  schema.sql (SQLite) · schema_postgresql.sql · air_quality.db · csv/ (tablas exportadas)
 analisis/  gráficas, capturas y resumen.json
 docs/      informe técnico (.docx) y guion del video
 ```

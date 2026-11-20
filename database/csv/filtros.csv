@@ -1,0 +1,6 @@
+codigo,nombre,descripcion
+PRE,Prefiltro G4,Retiene partículas gruesas y protege el filtro HEPA.
+HEPA,Filtro HEPA H13,"Captura ≥ 99,95 % de partículas finas (PM2.5 y PM10)."
+CARBON,Carbón activado,Adsorbe gases orgánicos y olores; remoción baja de CO.
+CATALIZADOR,Catalizador de hopcalita,Oxida el CO a CO₂ a temperatura ambiente.
+CO2,Adsorbente de CO₂ (zeolita) + renovación de aire,Reduce el CO₂ por adsorción e intercambio con aire limpio.
